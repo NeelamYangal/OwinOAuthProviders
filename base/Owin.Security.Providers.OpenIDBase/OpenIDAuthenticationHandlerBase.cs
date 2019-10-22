@@ -366,7 +366,7 @@ namespace Owin.Security.Providers.OpenIDBase
 
         private async Task DoYadisDiscoveryAsync()
         {
-            // 1° request
+            // 1Â° request
             var httpResponse = await SendRequestAsync(Options.ProviderDiscoveryUri, ContenttypeXrds, ContenttypeHTML, ContenttypeXhtml);
             if (httpResponse.StatusCode != HttpStatusCode.OK)
             {
@@ -377,7 +377,7 @@ namespace Owin.Security.Providers.OpenIDBase
 
             await httpResponse.Content.LoadIntoBufferAsync();
 
-            // 2° request (if necessary)
+            // 2Â° request (if necessary)
             if (!await IsXrdsDocumentAsync(httpResponse))
             {
                 IEnumerable<string> uriStrings;
@@ -401,7 +401,7 @@ namespace Owin.Security.Providers.OpenIDBase
                 if (url == null)
                 {
                     Logger.WriteError($"The uri {Options.ProviderDiscoveryUri} doesn't return an XRDS document.");
-                    return;
+                    throw new UriDoesNotReturnXRDSDocument();
                 }
                 else
                 {
@@ -415,7 +415,7 @@ namespace Owin.Security.Providers.OpenIDBase
                     if (!await IsXrdsDocumentAsync(httpResponse))
                     {
                         Logger.WriteError($"The uri {url.AbsoluteUri} doesn't return an XRDS document.");
-                        return;
+                        throw new UriDoesNotReturnXRDSDocument();
                     }
                 }
             }
